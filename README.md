@@ -1,135 +1,69 @@
-# Visualis
+<div align="center">
 
-### Universal Visual Intelligence Layer for Text-Based AI Agents
+<img src="docs/assets/visualis-banner.svg" alt="Visualis — Visual intelligence for AI agents" width="100%">
 
-**Give any AI agent the ability to understand images — without requiring multimodal LLMs, GPUs, or mandatory cloud APIs.**
+<br>
 
-Visualis is an open-source visual perception framework that transforms raw images into structured, machine-readable intelligence.
+[![Python](https://img.shields.io/badge/Python-3.13%2B-f5f0e8?style=for-the-badge&logo=python&logoColor=111111)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-f5f0e8?style=for-the-badge)](LICENSE)
+[![MCP](https://img.shields.io/badge/MCP-Compatible-f5f0e8?style=for-the-badge&logo=github&logoColor=111111)](https://modelcontextprotocol.io/)
 
-It enables text-only LLMs and autonomous agents to work with screenshots, photographs, diagrams, interfaces, documents, and other visual content through deterministic computer vision, optional machine-learning backends, and evidence-based analysis.
+**Give text-based AI agents a way to understand images.**
 
-No proprietary vision models. No mandatory API keys. No GPU required.
+Local-first image analysis. Structured results. Optional ML backends.
+
+[Getting started](#-quick-start) · [Capabilities](#-what-it-does) · [Architecture](#-how-it-works)
+
+</div>
+
+---
+
+## What is Visualis?
+
+Visualis is an open-source visual perception layer for text-based AI agents.
+
+It processes images and turns measurable visual information into structured data that an LLM can use — without requiring a multimodal model, a GPU, or a paid vision API.
+
+- **Local-first:** core image analysis runs on your machine.
+- **Modular:** install only the capabilities you need.
+- **Evidence-aware:** results identify where each observation came from.
+- **Agent-ready:** use it from Python or through MCP.
+
+> Visualis provides visual evidence. Your AI agent handles the reasoning.
+
+## What it does
+
+| Module | Capabilities |
+|:--|:--|
+| **Pixels & colors** | Pixel sampling, dominant colors, histograms, color statistics |
+| **Geometry** | Edges, corners, symmetry, blur and sharpness metrics |
+| **OCR** | Text extraction with backend confidence and regions where available |
+| **Visual providers** | Optional object detection, classification and segmentation backends |
+| **Metadata** | Dimensions, format and image metadata |
+
+OCR and advanced inference require their optional dependencies. Available results depend on the installed backends.
+
+## How it works
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3.13+-3776AB?style=flat-square&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/License-MIT-white?style=flat-square" />
-  <img src="https://img.shields.io/badge/Architecture-Modular-8A2BE2?style=flat-square" />
-  <img src="https://img.shields.io/badge/AI_Agent-MCP-000000?style=flat-square" />
+  <img src="docs/assets/process.jpeg" alt="Visualis processing pipeline" width="88%">
 </p>
 
----
+Visualis combines deterministic computer vision with optional inference providers. Each result carries its source, execution status and — when the backend provides it — confidence information.
 
-## The Problem
+| Evidence | Meaning |
+|:--|:--|
+| `PIXEL_MEASUREMENT` | Direct measurements from image pixels |
+| `GEOMETRIC_ANALYSIS` | Computed visual properties |
+| `OCR_DETECTION` | Text returned by an OCR backend |
+| `OBJECT_DETECTION` | Object-detection inference |
+| `SEMANTIC_PROVIDER` | Output from a semantic provider |
 
-Most AI agents interact with the world through text.
+Confidence scores are backend-specific, not universal probabilities.
 
-They can reason, write code, execute commands, browse the internet, and use external tools. However, when presented with an image, screenshot, or visual interface, text-only models have no native way to interpret its contents.
+## Quick start
 
-This creates a significant limitation for autonomous agents.
-
-They cannot reliably:
-- Understand the structure of a screenshot.
-- Extract text from visual interfaces.
-- Identify dominant colors and visual regions.
-- Analyze geometric relationships.
-- Inspect image composition and visual properties.
-- Convert visual information into structured context.
-
-Traditional solutions rely on multimodal models or external vision APIs, introducing additional costs, dependencies, privacy concerns, and infrastructure requirements.
-
-**Visualis takes a different approach.**
-
-Instead of requiring an AI model to see, it processes images locally and translates visual information into structured evidence that existing text-based models can understand.
-
-## How It Works
-
-<p align="center">
-  <img
-    src="docs/assets/process.jpeg"
-    alt="Visualis visual perception architecture"
-    width="850"
-  />
-</p>
-
-The perception engine combines deterministic image analysis with optional inference backends.
-
-Every analysis result carries metadata about its origin, execution status, and confidence where applicable.
-
-This allows an agent to distinguish measured pixel information from OCR output or model-generated predictions.
-
----
-
-## Core Capabilities
-
-### 1. Pixel Intelligence
-
-Extract precise visual information directly from image data.
-
-- Exact pixel sampling.
-- Dominant color extraction.
-- Color distribution and histograms.
-- Region-based statistical analysis.
-- Image dimensions and metadata.
-- RGB and other color-space measurements.
-
-### 2. Geometric Analysis
-
-Understand the structural properties of an image without requiring a neural network.
-
-- Edge detection.
-- Harris corner detection.
-- Symmetry analysis.
-- Noise estimation.
-- Blur and sharpness metrics.
-- Basic structural measurements.
-
-### 3. Optical Character Recognition
-
-Extract readable text from visual content using optional OCR backends.
-
-Supported integrations:
-
-- RapidOCR (ONNX Runtime).
-- Tesseract.
-
-OCR results include confidence information and extracted text regions where supported by the backend.
-
-### 4. Optional Visual Intelligence Backends
-
-Extend the deterministic perception engine with machine-learning capabilities.
-
-The provider architecture is designed to support:
-
-- Object detection.
-- Image classification.
-- Semantic segmentation.
-- Advanced visual recognition.
-
-These capabilities are optional and depend on the configured backend and available models.
-
-### 5. Evidence-Based Results
-
-Visualis does not treat every observation as equally reliable.
-
-Each result identifies its evidence source, allowing downstream agents to evaluate information according to its origin.
-
-| Evidence Source | Origin |
-|---|---|
-| `PIXEL_MEASUREMENT` | Direct pixel measurements |
-| `GEOMETRIC_ANALYSIS` | Computed image properties |
-| `OCR_DETECTION` | OCR backend output |
-| `OBJECT_DETECTION` | Object detection inference |
-| `SEMANTIC_PROVIDER` | External semantic provider |
-
-Confidence values are backend-dependent and should not be interpreted as universal probabilities.
-
----
-
-## Quick Start
-
-### Installation
-
-Minimal installation:
+### Install
 
 ```bash
 pip install visualis
@@ -138,87 +72,47 @@ pip install visualis
 Optional OCR backends:
 
 ```bash
-# ONNX-based OCR
-pip install "visualis[ocr-rapid]"
-
-# Tesseract OCR
-pip install "visualis[ocr]"
+pip install "visualis[ocr-rapid]"  # RapidOCR / ONNX Runtime
+pip install "visualis[ocr]"        # Tesseract
+pip install "visualis[all]"        # All optional dependencies
 ```
 
-Full installation:
-
-```bash
-pip install "visualis[all]"
-```
-
-### Basic Usage
+### Inspect an image
 
 ```python
 from visualis import inspect
 
-context = inspect("screenshot.png", depth="standard")
+result = inspect("screenshot.png", depth="standard")
 
-# Extract recognized text
-print(context.ocr_text())
-
-# Access structured color information
-colors = context.module("colors")
-
-print(colors.payload["dominant_colors"])
-
-# Access image metadata
-metadata = context.results["metadata"]
-
-print(f"Dimensions: {metadata.payload['width']}x{metadata.payload['height']}")
-
-# Export the complete analysis
-print(context.to_json())
+print(result.ocr_text())
+print(result.module("colors").payload["dominant_colors"])
+print(result.to_json())
 ```
 
-### Selective Analysis
-
-You don't always need a complete image inspection.
-
-Run only the modules required by your application:
+Run only the modules you need:
 
 ```python
-context = inspect(
+result = inspect(
     "screenshot.png",
-    tasks=["pixels", "colors", "ocr"]
+    tasks=["pixels", "colors", "ocr"],
 )
 ```
 
-This reduces unnecessary processing and gives developers more control over execution.
+### Analysis profiles
 
----
+| Profile | Includes | Best for |
+|:--|:--|:--|
+| `fast` | Metadata, pixels and colors | Quick inspection |
+| `standard` | Fast + geometry + OCR | Everyday use |
+| `deep` | Extended analysis and configured providers | More detailed inspection |
 
-## Analysis Depths
+The modules that run depend on installed packages and provider configuration.
 
-Visualis provides three analysis profiles.
+## Use it with AI agents
 
-| Depth | Processing | Intended Use |
-|---|---|---|
-| `fast` | Metadata, pixels, colors | Lightweight inspection |
-| `standard` | Fast + geometry + OCR | General-purpose perception |
-| `deep` | Extended analysis and configured advanced backends | Comprehensive inspection |
+### MCP
 
-The actual modules executed depend on installed optional dependencies and backend configuration.
-
----
-
-## Built for AI Agents
-
-Visualis is designed to work as an independent perception layer.
-
-It does not need to control the LLM, manage conversations, or replace an agent framework.
-
-Instead, it provides visual context that can be consumed by any compatible system.
-
-### MCP Integration
-
-Expose visual perception directly to MCP-compatible agents.
-
-Start the server:
+Start the MCP server:
 
 ```bash
 visualis-mcp
@@ -226,12 +120,10 @@ visualis-mcp
 
 Available tools:
 
-| Tool | Description |
-|---|---|
-| `visualis.inspect_image` | Execute a configurable image inspection |
-| `visualis.ocr_image` | Extract text from an image |
+- `visualis.inspect_image` — configurable image inspection.
+- `visualis.ocr_image` — text extraction.
 
-Python integration:
+Or create the server in Python:
 
 ```python
 from visualis.interfaces.mcp.server import create_mcp_server
@@ -239,13 +131,7 @@ from visualis.interfaces.mcp.server import create_mcp_server
 server = create_mcp_server()
 ```
 
-### REST API
-
-A REST API is planned as an additional integration interface.
-
 ### CLI
-
-Inspect images directly from your terminal:
 
 ```bash
 visualis inspect image.png
@@ -254,192 +140,76 @@ visualis detect image.png
 visualis compare image1.png image2.png
 ```
 
-Some commands require optional backends and configuration.
+Some commands require optional backends.
 
----
+## Safety by design
 
-## Architecture
+Images are untrusted input. Visualis includes safeguards such as:
 
-Visualis follows a modular architecture designed for extensibility, isolation, and maintainability.
-
-```text
-src/visualis/
-│
-├── core/
-│   ├── schemas.py
-│   ├── config.py
-│   └── engine.py
-│
-├── processing/
-│   └── loader.py
-│
-├── perception/
-│   ├── pixels/
-│   ├── colors/
-│   ├── geometry/
-│   ├── ocr/
-│   └── detection/
-│
-├── providers/
-│   ├── interfaces.py
-│   ├── onnx/
-│   └── semantic/
-│
-└── interfaces/
-    ├── mcp/
-    ├── cli/
-    └── api/
-
-tests/
-├── unit/
-├── integration/
-├── benchmarks/
-└── fixtures/
-```
-
-### Design Principles
-
-- **Modularity:** Perception modules operate independently.
-- **Extensibility:** New providers can be integrated without redesigning the core.
-- **Portability:** The deterministic processing layer runs locally.
-- **Transparency:** Results include evidence provenance.
-- **Graceful degradation:** Missing optional dependencies should not prevent unrelated capabilities from working.
-- **Agent compatibility:** Structured outputs are designed for programmatic consumption.
-
----
-
-## Security and Reliability
-
-Images are untrusted input.
-
-Visualis treats image processing as a security boundary rather than assuming that uploaded files are safe.
-
-Current security mechanisms include:
-
-- Decompression-bomb protection through pixel limits.
+- Pixel limits to help prevent decompression-bomb attacks.
 - EXIF orientation normalization.
 - Path traversal rejection.
-- SVG sanitization and restricted rasterization.
+- Restricted SVG rasterization and sanitization.
 - Lazy loading of external provider credentials.
-- No execution of embedded image metadata.
-- OCR output marked as untrusted external content.
+- OCR output treated as untrusted content.
 
-### Prompt Injection Protection
+**Text found inside an image is data, not an instruction.** Agents should not follow instructions extracted from images unless the user explicitly authorizes them.
 
-Images may contain text designed to manipulate an AI agent.
+## Supported formats
 
-Visualis does not treat recognized text as executable instructions.
-
-OCR output is classified as untrusted data by default. Downstream agents must not follow instructions extracted from images without explicit authorization from the user.
-
-**Visual information is evidence, not authority.**
-
----
-
-## Supported Formats
-
-| Format | Support |
-|---|---|
-| PNG | Yes |
-| JPEG | Yes |
-| WEBP | Yes |
-| BMP | Yes |
-| TIFF | Yes |
-| GIF | First frame by default |
-| SVG | Restricted rasterization |
-
-SVG processing requires a supported rasterization backend, such as CairoSVG, Inkscape, or `rsvg-convert`.
-
----
+PNG · JPEG · WEBP · BMP · TIFF · GIF (first frame by default) · SVG (restricted rasterization; requires a supported backend).
 
 ## Configuration
 
-Visualis uses environment variables prefixed with `VISUALIS_`.
+Environment variables use the `VISUALIS_` prefix.
 
-| Variable | Default | Description |
-|---|---|---|
-| `VISUALIS_MAX_PIXELS` | `16000000` | Maximum permitted image pixels |
-| `VISUALIS_OCR_CONFIDENCE_FLOOR` | `0.5` | Minimum OCR confidence threshold |
-| `VISUALIS_LOG_LEVEL` | `INFO` | Logging verbosity |
-
-External provider credentials are loaded lazily and are not included in configuration dumps.
-
----
+| Variable | Default | Purpose |
+|:--|:--|:--|
+| `VISUALIS_MAX_PIXELS` | `16000000` | Maximum image pixel count |
+| `VISUALIS_OCR_CONFIDENCE_FLOOR` | `0.5` | OCR confidence threshold |
+| `VISUALIS_LOG_LEVEL` | `INFO` | Log verbosity |
 
 ## Development
-
-Clone the repository:
 
 ```bash
 git clone https://github.com/visualis/visualis.git
 cd visualis
-```
 
-Create the development environment:
-
-```bash
 uv venv --python 3.13
 source .venv/bin/activate
 uv pip install -e ".[dev]"
+
+pytest tests/unit/
 ```
 
-Run tests:
+Optional integration tests and benchmarks:
 
 ```bash
-# Deterministic unit tests
-pytest tests/unit/
-
-# Optional backend integration tests
 pytest tests/integration/
-
-# Performance benchmarks
 pytest tests/benchmarks/
 ```
 
-The unit test suite is designed to run without optional inference backends.
-
----
-
 ## Roadmap
 
-Visualis is being developed toward a comprehensive, modular visual perception framework.
-
-- [ ] YOLO-based object detection with proper NMS post-processing.
-- [ ] Semantic segmentation using classical CV and optional ONNX models.
+- [ ] Object detection with YOLO and NMS.
+- [ ] Semantic segmentation.
 - [ ] Chart and diagram interpretation.
-- [ ] Advanced image comparison.
-- [ ] Tiled processing for large images.
+- [ ] Advanced image comparison and tiled processing.
 - [ ] REST API with authentication.
-- [ ] Docker deployment support.
-- [ ] Improved visual region and spatial relationship analysis.
-- [ ] Expanded benchmarking and backend evaluation.
+- [ ] Docker deployment.
+- [ ] Better spatial and region analysis.
 
-Roadmap items represent planned work, not currently available functionality.
-
----
-
-## Philosophy
-
-Visualis is built around a simple idea:
-
-**An AI agent shouldn't need a multimodal model just to extract useful information from an image.**
-
-Many visual properties can be measured directly. Text can be extracted through local OCR. Geometric structures can be analyzed algorithmically. More advanced recognition can be added when necessary.
-
-By separating perception from reasoning, Visualis makes visual capabilities more accessible, portable, and composable.
-
-It doesn't try to replace vision models.
-
-It provides an independent visual intelligence layer that text-based AI systems can use.
-
----
+Roadmap items are planned, not necessarily available today.
 
 ## License
 
-Visualis is released under the [MIT License](LICENSE).
+[MIT](LICENSE)
 
 ---
 
-<p align="center">
-  <strong>Visualis — Making visual perception accessible to every AI agent.</strong>
-</p>
+<div align="center">
+
+**VISUALIS**  
+*Making visual perception accessible to every AI agent.*
+
+</div>
