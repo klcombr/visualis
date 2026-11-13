@@ -1,0 +1,100 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "visualis"
+version = "0.1.0"
+description = "Universal visual intelligence layer for text-based AI agents."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Visualis contributors" }]
+keywords = ["computer-vision", "ocr", "mcp", "ai-agents", "image-analysis"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Multimedia :: Graphics :: Graphics Conversion and Compression",
+  "Topic :: Scientific/Engineering :: Image Processing",
+  "Operating System :: OS Independent",
+]
+
+# Base install is deliberately tiny: no model weights, no API keys, no GPU,
+# no mandatory external vision provider. Everything here is deterministic math.
+dependencies = [
+  "pillow>=10.0",
+  "numpy>=1.24",
+  "pydantic>=2.5",
+]
+
+[project.optional-dependencies]
+# --- perception backends -----------------------------------------------------
+ocr = ["pytesseract>=0.3.10"]           # needs the `tesseract` binary + traineddata
+ocr-rapid = ["rapidocr-onnxruntime>=1.3"]  # self-contained ONNX OCR (ships weights)
+detect = ["onnxruntime>=1.16"]          # object detection / segmentation runtimes
+segment = ["scipy>=1.11"]               # connected components, mask topology
+svg = ["cairosvg>=2.7"]                 # SVG rasterisation (alt: rsvg-convert binary)
+# --- interfaces --------------------------------------------------------------
+cli = ["typer>=0.12", "rich>=13.0"]
+api = ["fastapi>=0.110", "uvicorn>=0.27", "python-multipart>=0.0.7"]
+mcp = ["mcp>=1.0"]
+# --- bundles -----------------------------------------------------------------
+all = [
+  "visualis[ocr,ocr-rapid,detect,segment,svg,cli,api,mcp]",
+]
+dev = [
+  "visualis[all]",
+  "pytest>=8.0",
+  "pytest-asyncio>=0.23",
+  "httpx>=0.27",
+  "ruff>=0.6",
+  "mypy>=1.10",
+]
+
+[project.scripts]
+visualis = "visualis.interfaces.cli:main"
+visualis-mcp = "visualis.interfaces.mcp.server:main"
+visualis-api = "visualis.interfaces.api:main"
+
+[project.urls]
+Homepage = "https://github.com/visualis/visualis"
+Documentation = "https://github.com/visualis/visualis/tree/main/docs"
+Issues = "https://github.com/visualis/visualis/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/visualis"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "docs", "examples", "scripts", "SKILL.md", "README.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+  "integration: exercises optional heavy backends (ONNX models, native binaries)",
+  "benchmark: timing/throughput measurements, not pass/fail logic",
+  "network: needs an outbound connection (skipped by default)",
+]
+filterwarnings = [
+  "ignore::pytest.PytestDeprecationWarning",
+  "ignore::DeprecationWarning",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_unreachable = true
+mypy_path = "src"
+packages = ["visualis"]
+ignore_missing_imports = true
